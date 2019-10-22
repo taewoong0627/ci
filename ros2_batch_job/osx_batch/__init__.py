@@ -73,8 +73,8 @@ class OSXBatchJob(BatchJob):
         if 'rmw_connext_cpp' not in self.args.ignore_rmw:  # or 'rmw_connext_dynamic_cpp' not in self.args.ignore_rmw:
             # Try to find the connext env file and source it
             connext_env_file = os.path.join(
-                '/Applications', 'rti_connext_dds-5.3.1', 'resource', 'scripts',
-                'rtisetenv_x64Darwin16clang8.0.bash')
+                '/Applications', 'rti_connext_dds-6.0.0', 'resource', 'scripts',
+                'rtisetenv_x64Darwin17clang9.0.bash')
             if not os.path.exists(connext_env_file):
                 warn("Asked to use Connext but the RTI env was not found at '{0}'".format(
                     connext_env_file))

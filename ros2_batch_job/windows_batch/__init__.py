@@ -27,6 +27,8 @@ class WindowsBatchJob(BatchJob):
         BatchJob.__init__(self, python_interpreter=args.python_interpreter)
 
     def pre(self):
+        if 'CYCLONEDDS_URI' not in os.environ:
+            os.environ['CYCLONEDDS_URI'] = '<General><NetworkInterfaceAddress>localhost</></>'
         pass
 
     def post(self):

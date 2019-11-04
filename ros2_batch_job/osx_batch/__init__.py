@@ -61,6 +61,8 @@ class OSXBatchJob(BatchJob):
         # See: https://github.com/Homebrew/homebrew-core/issues/8392#issuecomment-334328367
         os.environ['CMAKE_PREFIX_PATH'] = os.environ.get('CMAKE_PREFIX_PATH', '') + os.pathsep + \
             '/usr/local/opt/qt'
+        if 'CYCLONEDDS_URI' not in os.environ:
+            os.environ['CYCLONEDDS_URI'] = '<General><NetworkInterfaceAddress>localhost</></>'
 
     def post(self):
         if self.use_ccache:

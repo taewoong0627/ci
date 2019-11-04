@@ -31,6 +31,8 @@ class LinuxBatchJob(BatchJob):
         # Assume machines won't crosstalk even if they have the same default ROS_DOMAIN_ID
         if 'ROS_DOMAIN_ID' not in os.environ:
             os.environ['ROS_DOMAIN_ID'] = '108'
+        if 'CYCLONEDDS_URI' not in os.environ:
+            os.environ['CYCLONEDDS_URI'] = '<General><NetworkInterfaceAddress>localhost</></>'
         # Check for ccache's directory, as installed by apt-get
         ccache_exe_dir = '/usr/lib/ccache'
         if os.path.isdir(ccache_exe_dir):

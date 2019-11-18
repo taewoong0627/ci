@@ -57,6 +57,7 @@ ENV ROS_PYTHON_VERSION 3
 ENV CFLAGS -I/usr/lib64/python3.6/site-packages/numpy/core/include
 ENV CXXFLAGS -Wno-error=int-in-bool-context -I/usr/lib64/python3.6/site-packages/numpy/core/include
 ENV LANG en_US.UTF-8
+ENV NO_COLOR 1
 
 # Set up rosdep
 RUN rosdep init

@@ -276,6 +276,13 @@ echo "# END SECTION"
 setlocal enableDelayedExpansion
 rmdir /S /Q ws workspace "work space"
 
+echo "# BEGIN SECTION: Build DockerFile"
+# No DOCKER_BUILD_ARGS yet, creating placeholder
+# export DOCKER_BUILD_ARGS=""
+export CONTAINER_NAME=ros2_windows_ci
+docker build -t $CONTAINER_NAME "windows_docker_resources_msvc!CI_VISUAL_STUDIO_VERSION!"
+echo "# END SECTION"
+
 echo "# BEGIN SECTION: Determine arguments"
 set "PATH=!PATH:"=!"
 set "CI_ARGS=--force-ansi-color --workspace-path !WORKSPACE!"
@@ -347,8 +354,9 @@ if "!CI_TEST_ARGS!" NEQ "" (
 echo Using args: !CI_ARGS!
 echo "# END SECTION"
 
-echo "# BEGIN SECTION: Run script"
-python -u run_ros2_batch.py !CI_ARGS!
+echo "# BEGIN SECTION: Run DockerFile"
+docker network create -o com.docker.network.bridge.enable_icc=false isolated_network || true
+docker run --rm --net=isolated_network -e CI_ARGS="$CI_ARGS" -t $CONTAINER_NAME
 echo "# END SECTION"
 @[else]@
 @{ assert False, 'Unknown os_name: ' + os_name }@

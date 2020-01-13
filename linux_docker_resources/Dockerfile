@@ -127,6 +127,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y libtinyxml-dev 
 # Install Python3 development files.
 RUN apt-get update && apt-get install --no-install-recommends -y python3-dev
 
+# Install boost thread
+RUN apt-get update && apt-get install --no-install-recommends -y libboost-thread-dev
+
 # automatic invalidation once every day.
 RUN echo "@today_str"
 

@@ -28,6 +28,10 @@ class OSXBatchJob(BatchJob):
         BatchJob.__init__(self, python_interpreter=args.python_interpreter)
 
     def pre(self):
+        print('# BEGIN SUBSECTION: XCode version')
+        self.run(['xcodebuild', '-version'])
+        print('# END SUBSECTION')
+
         # Prepend the PATH with `/usr/local/bin` for global Homebrew binaries.
         os.environ['PATH'] = '/usr/local/bin' + os.pathsep + os.environ.get('PATH', '')
         # Check for ccache's directory, as installed by brew

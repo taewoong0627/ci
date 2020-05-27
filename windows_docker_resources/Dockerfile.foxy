@@ -61,7 +61,7 @@ RUN powershell -noexit "Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((
 RUN choco install -y cmake curl git vcredist2013 vcredist140 cppcheck patch
 RUN choco install -y -s C:\TEMP asio cunit eigen tinyxml-usestl tinyxml2 log4cxx bullet
 
-RUN C:\TEMP\Win64OpenSSL.exe /VERYSILENT
+RUN C:\TEMP\Win64OpenSSL.exe
 
 # For extracting .7z files
 ADD https://www.7-zip.org/a/7z1900-x64.exe C:\TEMP\

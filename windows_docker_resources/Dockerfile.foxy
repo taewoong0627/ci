@@ -127,14 +127,14 @@ RUN C:\TEMP\connext\rti_connext_dds-5.3.1-pro-host-x64Win64.exe `
   --prefix "%ProgramFiles%"
 
 COPY rticonnextdds-src\openssl-1.0.2n-5.3.1-host-x64Win64.rtipkg C:\TEMP\connext\
-RUN ""%ProgramFiles%\rti_connext_dds-5.3.1\bin\rtipkginstall.bat" C:\TEMP\connext\openssl-1.0.2n-5.3.1-host-x64Win64.rtipkg"
+RUN ""%ProgramFiles%\rti_connext_dds-5.3.1\bin\rtipkginstall.bat" -u C:\TEMP\connext\openssl-1.0.2n-5.3.1-host-x64Win64.rtipkg"
 COPY rticonnextdds-src\rti_connext_dds-5.3.1-pro-target-x64Win64VS2017.rtipkg.??? C:\TEMP\connext\
 RUN copy /b C:\TEMP\connext\rti_connext_dds-5.3.1-pro-target-x64Win64VS2017.rtipkg.??? C:\TEMP\connext\rti_connext_dds-5.3.1-pro-target-x64Win64VS2017.rtipkg
-RUN ""%ProgramFiles%\rti_connext_dds-5.3.1\bin\rtipkginstall.bat" C:\TEMP\connext\rti_connext_dds-5.3.1-pro-target-x64Win64VS2017.rtipkg"
+RUN ""%ProgramFiles%\rti_connext_dds-5.3.1\bin\rtipkginstall.bat" -u C:\TEMP\connext\rti_connext_dds-5.3.1-pro-target-x64Win64VS2017.rtipkg"
 COPY rticonnextdds-src\rti_security_plugins-5.3.1-host-x64Win64.rtipkg C:\TEMP\connext\
-RUN ""%ProgramFiles%\rti_connext_dds-5.3.1\bin\rtipkginstall.bat" C:\TEMP\connext\rti_security_plugins-5.3.1-host-x64Win64.rtipkg"
+RUN ""%ProgramFiles%\rti_connext_dds-5.3.1\bin\rtipkginstall.bat" -u C:\TEMP\connext\rti_security_plugins-5.3.1-host-x64Win64.rtipkg"
 COPY rticonnextdds-src\rti_security_plugins-5.3.1-target-x64Win64VS2017.rtipkg C:\TEMP\connext\
-RUN ""%ProgramFiles%\rti_connext_dds-5.3.1\bin\rtipkginstall.bat" C:\TEMP\connext\rti_security_plugins-5.3.1-target-x64Win64VS2017.rtipkg"
+RUN ""%ProgramFiles%\rti_connext_dds-5.3.1\bin\rtipkginstall.bat" -u C:\TEMP\connext\rti_security_plugins-5.3.1-target-x64Win64VS2017.rtipkg"
 
 # Visual Studio Build Tools and .Net SDK`
 ADD https://aka.ms/vs/16/release/vs_BuildTools.exe C:\TEMP\

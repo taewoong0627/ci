@@ -127,6 +127,13 @@ RUN yum install \
   zlib-devel \
   -y
 
+# Try out a new release of Eigen
+RUN sudo yum update \
+  eigen3-devel \
+  --enablerepo=epel-testing \
+  --skip-broken \
+  -y
+
 # Create a user to own the build output.
 RUN useradd -u 1234 -m rosbuild
 RUN sudo -H -u rosbuild -- git config --global user.email "jenkins@ci.ros2.org"

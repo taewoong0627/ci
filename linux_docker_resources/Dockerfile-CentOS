@@ -10,6 +10,7 @@ RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-*
 # Add some COPRs
 RUN yum -y install yum-plugin-copr
 RUN yum -y copr enable cottsay/devtoolset-8-make-nonblocking
+RUN yum -y copr enable cottsay/el7-bullet
 
 # Install foundation packages
 RUN yum install \

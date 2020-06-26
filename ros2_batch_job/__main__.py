@@ -84,7 +84,8 @@ if sys.platform in ('darwin'):
     pip_dependencies += [
         'cryptography',
         'lxml',
-        'netifaces'
+        'netifaces',
+        'pybind11',
     ]
 
 colcon_packages = [
@@ -533,6 +534,7 @@ def run(args, build_function, blacklisted_package_names=None):
                     'lxml',
                     'netifaces',
                     'numpy',
+                    'pybind11',
                 ]
         if not args.colcon_branch:
             pip_packages += colcon_packages

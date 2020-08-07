@@ -374,17 +374,17 @@ def build_and_test(args, job):
         with open(pytest_6_version_file, 'r') as current_version_file:
             pytest_6_or_greater = StrictVersion(current_version_file.read()) >= StrictVersion("6.0.0")
 
+        print(pytest_6_or_greater)
         for path in Path('.').rglob('pytest.ini'):
             config = configparser.ConfigParser()
             config.read(str(path))
-            if pytest_6_or_greater:
+            print(str(path))
+            # if pytest_6_or_greater:
                 # only need to correct explicit legacy option if exists
-                if not check_xunit2_junit_family_value(config, 'legacy'):
-                    continue
-            else:
-                # in pytest < 6 need to enforce xunit2 if not set
-                if check_xunit2_junit_family_value(config, 'xunit2'):
-                    continue
+                # if not check_xunit2_junit_family_value(config, 'legacy'):
+                    # continue
+            if check_xunit2_junit_family_value(config, 'xunit2'):
+                continue
             print("Patch '%s' to override 'pytest.junit_family=xunit2'" % path)
             config.set('pytest', 'junit_family', 'xunit2')
             with open(path, 'w+') as configfile:

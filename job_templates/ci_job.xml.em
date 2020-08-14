@@ -196,7 +196,7 @@ fi
 if [ -n "${CI_TEST_ARGS+x}" ]; then
   export CI_ARGS="$CI_ARGS --test-args $CI_TEST_ARGS"
 fi
-if [ -n "$CI_ENABLE_COVERAGE" ] && [ -n "$CI_COVERAGE_FILTER_PKGS" ]; then
+if [ -n "$CI_ENABLE_COVERAGE" ] &amp;&amp; [ -n "$CI_COVERAGE_FILTER_PKGS" ]; then
   export CI_ARGS="$CI_ARGS --coverage-filter-packages $CI_COVERAGE_FILTER_PKGS"
 fi
 echo "Using args: $CI_ARGS"

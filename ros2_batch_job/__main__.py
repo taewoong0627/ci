@@ -361,7 +361,7 @@ def process_coverage(args, job):
     print(cmd)
     subprocess.run(cmd, check=True)
 
-    if args.packages_for_coverage:
+    if args.coverage_filter_packages:
         filter_unit_coverage(args, coverage_file)
     else:
         include_python_coverage_in_report(args)

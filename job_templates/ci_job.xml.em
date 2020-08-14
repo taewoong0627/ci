@@ -183,9 +183,6 @@ if [ "$CI_COMPILE_WITH_CLANG" = "true" ]; then
 fi
 if [ "$CI_ENABLE_COVERAGE" = "true" ]; then
   export CI_ARGS="$CI_ARGS --coverage"
-  if [ -n "$CI_COVERAGE_FILTER_PKGS" ]; then
-    export CI_ARGS="$CI_ARGS --coverage-filter-packages $CI_COVERAGE_FILTER_PKGS"
-  fi
 fi
 @[  if os_name in ['linux', 'linux-aarch64', 'linux-armhf'] and turtlebot_demo]@
 export CI_ARGS="$CI_ARGS --ros1-path /opt/ros/$CI_ROS1_DISTRO"
@@ -198,6 +195,9 @@ if [ -n "${CI_BUILD_ARGS+x}" ]; then
 fi
 if [ -n "${CI_TEST_ARGS+x}" ]; then
   export CI_ARGS="$CI_ARGS --test-args $CI_TEST_ARGS"
+fi
+if [ -n "$CI_ENABLE_COVERAGE" ] && [ -n "$CI_COVERAGE_FILTER_PKGS" ]; then
+  export CI_ARGS="$CI_ARGS --coverage-filter-packages $CI_COVERAGE_FILTER_PKGS"
 fi
 echo "Using args: $CI_ARGS"
 echo "# END SECTION"
@@ -344,9 +344,6 @@ if "!CI_COMPILE_WITH_CLANG!" == "true" (
 )
 if "!CI_ENABLE_COVERAGE!" == "true" (
   set "CI_ARGS=!CI_ARGS! --coverage"
-  if "!CI_COVERAGE_FILTER_PKGS!" NEQ "" (
-    set "CI_ARGS=!CI_ARGS! --coverage-filter-packages"
-  )
 )
 set "CI_ARGS=!CI_ARGS! --visual-studio-version !CI_VISUAL_STUDIO_VERSION!"
 if "!CI_BUILD_ARGS!" NEQ "" (
@@ -356,6 +353,9 @@ if "!CI_TEST_ARGS!" NEQ "" (
   set "CI_TEST_ARGS=!CI_TEST_ARGS:"=\"!"
   set "CI_TEST_ARGS=!CI_TEST_ARGS:|=^|!"
   set "CI_ARGS=!CI_ARGS! --test-args !CI_TEST_ARGS!"
+)
+if "!CI_ENABLE_COVERAGE!" == "true" AND "!CI_COVERAGE_FILTER_PKGS!" NEQ "" (
+  set "CI_ARGS=!CI_ARGS! --coverage-filter-packages"
 )
 echo Using args: !CI_ARGS!
 echo "# END SECTION"

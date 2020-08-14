@@ -308,7 +308,7 @@ def include_python_coverage_in_report(args, package=None):
 
 def filter_unit_coverage(args, coverage_info_file):
     build_paths_collection = []
-    for package_name in args.packages_for_coverage:
+    for package_name in args.coverage_filter_packages:
         # check if it is a python package generating its own coverage.xml
         include_python_coverage_in_report(args, package_name)
         build_paths_collection.append('*%s/*' % (str(os.path.join(args.buildspace, package_name))))
@@ -322,7 +322,7 @@ def filter_unit_coverage(args, coverage_info_file):
         '--packages-select', package_name]
     print(cmd)
     src_paths_collection = subprocess.check_output(cmd).decode('ascii').strip().splitlines()
-    if len(src_paths_collection) != args.packages_for_coverage:
+    if len(src_paths_collection) != args.coverage_filter_packages:
             print('One of the packages to report coverage rate for was not found')
             sys.exit(-1)
 

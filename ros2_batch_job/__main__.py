@@ -260,23 +260,19 @@ def get_args(sysargv=None):
         help='install directory path')
 
     argv = sysargv[1:] if sysargv is not None else sys.argv[1:]
-    print("0. argv")
-    print(argv)
     argv, build_args = extract_argument_group(argv, '--build-args')
     if '--test-args' in argv:
         argv, test_args = extract_argument_group(argv, '--test-args')
     else:
         build_args, test_args = extract_argument_group(build_args, '--test-args')
-    print("1. argv")
-    print(argv)
-    print("2. build_args")
-    print(build_args)
-    print("3. test_args")
-    print(test_args)
     if '--coverage-filter-packages' in argv:
         argv, coverage_filter_packages = extract_argument_group(argv, '--coverage-filter-packages')
-    elif '--coverage_filter_packages' in test_args:
-        tets_args, coverage_filter_packages = extract_argument_group(test_args, '--coverage-filter-packages')
+    elif '--coverage-filter-packages' in test_args:
+        test_args, coverage_filter_packages = extract_argument_group(test_args, '--coverage-filter-packages')
+    elif '--coverage-filter-packages' in build_args:
+        build_args, coverage_filter_packages = extract_argument_group(build_args, '--coverage-filter-packages')
+    else:
+        coverage_filter_packages = None
 
     args = parser.parse_args(argv)
     args.build_args = build_args

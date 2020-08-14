@@ -319,11 +319,9 @@ def filter_unit_coverage(args, coverage_info_file):
         'list',
         '--paths-only',
         '--base-paths', args.sourcespace,
-        '--packages-select', package_name]
+        '--packages-select', args.coverage_filter_packages]
     print(cmd)
     src_paths_collection = subprocess.check_output(cmd).decode('ascii').strip().splitlines()
-    print(src_paths_collection)
-    print(len(src_paths_collection))
     if len(src_paths_collection) != len(args.coverage_filter_packages):
             print('One of the packages to report coverage rate for was not found')
             sys.exit(-1)

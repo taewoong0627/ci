@@ -319,7 +319,7 @@ def filter_unit_coverage(args, coverage_info_file):
         'list',
         '--paths-only',
         '--base-paths', args.sourcespace,
-        '--packages-select', args.coverage_filter_packages]
+        '--packages-select', ' '.join(args.coverage_filter_packages)]
     print(cmd)
     src_paths_collection = subprocess.check_output(cmd).decode('ascii').strip().splitlines()
     if len(src_paths_collection) != len(args.coverage_filter_packages):

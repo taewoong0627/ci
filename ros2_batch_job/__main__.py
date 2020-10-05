@@ -456,6 +456,11 @@ def run(args, build_function, blacklisted_package_names=None):
     os.environ['GIT_COMMITTER_EMAIL'] = 'nobody@osrfoundation.org'
     os.environ['GIT_COMMITTER_NAME'] = 'nobody'
 
+    # Ignore Python deprecation warnings coming from pyreadline
+    # TODO(jacobperron): This can be removed after resolved upstream
+    #                    https://github.com/pyreadline/pyreadline/issues/65
+    os.environ['PYTHONWARNINGS'] = 'ignore::DeprecationWarning:pyreadline[.*]'
+
     info("Using workspace: @!{0}", fargs=(args.workspace,))
     # git doesn't work reliably inside qemu, so we're assuming that somebody
     # already checked out the code on the host and mounted it in at the right

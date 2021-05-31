@@ -38,8 +38,8 @@ try:
 except ImportError:
     sys.exit("Could not import symbol from ros_buildfarm, please update ros_buildfarm.")
 
-DEFAULT_REPOS_URL = 'https://raw.githubusercontent.com/ros2/ros2/master/ros2.repos'
-DEFAULT_MAIL_RECIPIENTS = 'ros2-buildfarm@googlegroups.com'
+DEFAULT_REPOS_URL = 'https://raw.githubusercontent.com/gurumnet/ros2/master/ros2.repos'
+DEFAULT_MAIL_RECIPIENTS = 'taewoong@gurum.cc'
 PERIODIC_JOB_SPEC = '30 7 * * *'
 
 template_prefix_path[:] = \
@@ -64,7 +64,7 @@ def main(argv=None):
         '--jenkins-url', '-u', default='https://ci.ros2.org',
         help="Url of the jenkins server to which the job should be added")
     parser.add_argument(
-        '--ci-scripts-repository', default='git@github.com:ros2/ci.git',
+        '--ci-scripts-repository', default='git@github.com:taewoong0627/ci.git',
         help="repository from which ci scripts should be cloned"
     )
     parser.add_argument(
@@ -172,7 +172,6 @@ def main(argv=None):
     }
 
     jenkins_kwargs = {}
-    jenkins_kwargs['context_lines'] = args.context_lines
     if not args.commit:
         jenkins_kwargs['dry_run'] = True
     pattern_select_jobs_regexp = ''

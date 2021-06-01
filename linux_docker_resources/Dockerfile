@@ -70,6 +70,8 @@ RUN pip3 install -U setuptools pip virtualenv==16.7.9
 
 # Initialize rosdep
 RUN rosdep init && rosdep update
+RUN rosdep install --from-paths src --ignore-src --rosdistro ${UBUNTU_DISTRO} -y --skip-keys "gurumdds-2.7"
+
 
 # Install clang if build arg is true
 RUN if test ${COMPILE_WITH_CLANG} = true; then apt-get update && apt-get install --no-install-recommends -y clang libc++-dev libc++abi-dev; fi

@@ -92,6 +92,7 @@ branch: ${build.buildVariableResolver.resolve('CI_BRANCH_TO_TEST')}, <br/>
 use_connextdds: ${build.buildVariableResolver.resolve('CI_USE_CONNEXTDDS')}, <br/>
 use_connext_debs: ${build.buildVariableResolver.resolve('CI_USE_CONNEXT_DEBS')}, <br/>
 use_cyclonedds: ${build.buildVariableResolver.resolve('CI_USE_CYCLONEDDS')}, <br/>
+use_gurumdds: ${build.buildVariableResolver.resolve('CI_USE_GURUMDDS')}, <br/>
 use_fastrtps_static: ${build.buildVariableResolver.resolve('CI_USE_FASTRTPS_STATIC')}, <br/>
 use_fastrtps_dynamic: ${build.buildVariableResolver.resolve('CI_USE_FASTRTPS_DYNAMIC')}, <br/>
 use_opensplice: ${build.buildVariableResolver.resolve('CI_USE_OPENSPLICE')}, <br/>
@@ -143,6 +144,9 @@ else
   if [ "$CI_USE_CONNEXTDDS" = "false" ]; then
     export CI_ARGS="$CI_ARGS rmw_connextdds"
   fi
+fi
+if [ "$CI_USE_GURUMDDS" = "false"]; then
+  export CI_ARGS="$CI_ARGS rmw_gurumdds_cpp"
 fi
 if [ "$CI_USE_CYCLONEDDS" = "false" ]; then
   export CI_ARGS="$CI_ARGS rmw_cyclonedds_cpp"
@@ -299,6 +303,9 @@ if "!CI_CONNEXTDDS_RMW!" == "rmw_connext_cpp" (
     set "CI_ARGS=!CI_ARGS! rmw_connextdds"
   )
 )
+if "!CI_USE_GURUMDDS!" == "false" (
+  set "CI_ARGS=!CI_ARGS! rmw_gurumdds_cpp"
+)
 if "!CI_USE_CYCLONEDDS!" == "false" (
   set "CI_ARGS=!CI_ARGS! rmw_cyclonedds_cpp"
 )
@@ -411,6 +418,9 @@ if "!CI_CONNEXTDDS_RMW!" == "rmw_connext_cpp" (
   if "!CI_USE_CONNEXTDDS!" == "false" (
     set "CI_ARGS=!CI_ARGS! rmw_connextdds"
   )
+)
+if "!CI_USE_GURUMDDS!" == "false" (
+  set "CI_ARGS=!CI_ARGS! rmw_gurumdds_cpp"
 )
 if "!CI_USE_CYCLONEDDS!" == "false" (
   set "CI_ARGS=!CI_ARGS! rmw_cyclonedds_cpp"

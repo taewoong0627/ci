@@ -710,6 +710,12 @@ def run(args, build_function, blacklisted_package_names=None):
                 'cyclonedds_cmake_module',
                 'rmw_cyclonedds_cpp',
             ]
+        if 'rmw_gurumdds_cpp' in args.ignore_rmw:
+            blacklisted_package_names += [
+                'rmw_gurumdds_cpp',
+                'rosidl_typesupport_gurumdds_c',
+                'rosidl_typesupport_gurumdds_cpp',
+            ]
         if 'rmw_fastrtps_cpp' in args.ignore_rmw:
             blacklisted_package_names += [
                 'rmw_fastrtps_cpp',

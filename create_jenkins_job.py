@@ -207,71 +207,71 @@ def main(argv=None):
             'cmake_build_type': 'None',
         })
 
-        if os_name == 'windows-metal':
-            # Don't create nightlies or packaging jobs for bare-metal Windows
-            continue
+        # if os_name == 'windows-metal':
+        #     # Don't create nightlies or packaging jobs for bare-metal Windows
+        #     continue
 
-        packaging_label_expression = os_configs[os_name]['label_expression']
-        if os_name == 'osx':
-            packaging_label_expression = 'macos &amp;&amp; mojave'
+        # packaging_label_expression = os_configs[os_name]['label_expression']
+        # if os_name == 'osx':
+        #     packaging_label_expression = 'macos &amp;&amp; mojave'
 
-        # configure a manual version of the packaging job
-        ignore_rmw_default_packaging = {'rmw_opensplice_cpp'}
-        if os_name in ['linux-aarch64', 'linux-armhf']:
-            ignore_rmw_default_packaging |= {'rmw_connext_cpp', 'rmw_connext_dynamic_cpp', 'rmw_connextdds'}
-        create_job(os_name, 'ci_packaging_' + os_name, 'packaging_job.xml.em', {
-            'build_discard': {
-                'days_to_keep': 180,
-                'num_to_keep': 100,
-            },
-            'cmake_build_type': 'RelWithDebInfo',
-            'label_expression': packaging_label_expression,
-            'mixed_overlay_pkgs': 'ros1_bridge',
-            'ignore_rmw_default': ignore_rmw_default_packaging,
-            'use_connext_debs_default': 'true',
-        })
+        # # configure a manual version of the packaging job
+        # ignore_rmw_default_packaging = {'rmw_opensplice_cpp'}
+        # if os_name in ['linux-aarch64', 'linux-armhf']:
+        #     ignore_rmw_default_packaging |= {'rmw_connext_cpp', 'rmw_connext_dynamic_cpp', 'rmw_connextdds'}
+        # create_job(os_name, 'ci_packaging_' + os_name, 'packaging_job.xml.em', {
+        #     'build_discard': {
+        #         'days_to_keep': 180,
+        #         'num_to_keep': 100,
+        #     },
+        #     'cmake_build_type': 'RelWithDebInfo',
+        #     'label_expression': packaging_label_expression,
+        #     'mixed_overlay_pkgs': 'ros1_bridge',
+        #     'ignore_rmw_default': ignore_rmw_default_packaging,
+        #     'use_connext_debs_default': 'true',
+        # })
 
-        # configure packaging job
-        create_job(os_name, 'packaging_' + os_name, 'packaging_job.xml.em', {
-            'build_discard': {
-                'days_to_keep': 370,
-                'num_to_keep': 370,
-            },
-            'cmake_build_type': 'RelWithDebInfo',
-            'disabled': os_name == 'linux-armhf',
-            'label_expression': packaging_label_expression,
-            'mixed_overlay_pkgs': 'ros1_bridge',
-            'time_trigger_spec': PERIODIC_JOB_SPEC,
-            'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
-            'ignore_rmw_default': ignore_rmw_default_packaging,
-            'use_connext_debs_default': 'true',
-        })
+        # # configure packaging job
+        # create_job(os_name, 'packaging_' + os_name, 'packaging_job.xml.em', {
+        #     'build_discard': {
+        #         'days_to_keep': 370,
+        #         'num_to_keep': 370,
+        #     },
+        #     'cmake_build_type': 'RelWithDebInfo',
+        #     'disabled': os_name == 'linux-armhf',
+        #     'label_expression': packaging_label_expression,
+        #     'mixed_overlay_pkgs': 'ros1_bridge',
+        #     'time_trigger_spec': PERIODIC_JOB_SPEC,
+        #     'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
+        #     'ignore_rmw_default': ignore_rmw_default_packaging,
+        #     'use_connext_debs_default': 'true',
+        # })
 
         # create a nightly Debug packaging job on Windows
-        if os_name == 'windows':
-            create_job(os_name, 'packaging_' + os_name + '_debug', 'packaging_job.xml.em', {
-                'build_discard': {
-                    'days_to_keep': 370,
-                    'num_to_keep': 370,
-                    },
-                'cmake_build_type': 'Debug',
-                'mixed_overlay_pkgs': 'ros1_bridge',
-                'time_trigger_spec': PERIODIC_JOB_SPEC,
-                'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
-                'ignore_rmw_default': ignore_rmw_default_packaging,
-                'use_connext_debs_default': 'true',
-            })
+        # if os_name == 'windows':
+        #     create_job(os_name, 'packaging_' + os_name + '_debug', 'packaging_job.xml.em', {
+        #         'build_discard': {
+        #             'days_to_keep': 370,
+        #             'num_to_keep': 370,
+        #             },
+        #         'cmake_build_type': 'Debug',
+        #         'mixed_overlay_pkgs': 'ros1_bridge',
+        #         'time_trigger_spec': PERIODIC_JOB_SPEC,
+        #         'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
+        #         'ignore_rmw_default': ignore_rmw_default_packaging,
+        #         'use_connext_debs_default': 'true',
+        #     })
 
         # configure nightly triggered job
-        if os_name != 'linux-armhf':
-            job_name = 'nightly_' + job_os_name + '_debug'
-            if os_name == 'windows':
-                job_name = job_name[:15]
-            create_job(os_name, job_name, 'ci_job.xml.em', {
-                'cmake_build_type': 'Debug',
-                'time_trigger_spec': PERIODIC_JOB_SPEC,
-                'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
-            })
+        # if os_name != 'linux-armhf':
+        #     job_name = 'nightly_' + job_os_name + '_debug'
+        #     if os_name == 'windows':
+        #         job_name = job_name[:15]
+        #     create_job(os_name, job_name, 'ci_job.xml.em', {
+        #         'cmake_build_type': 'Debug',
+        #         'time_trigger_spec': PERIODIC_JOB_SPEC,
+        #         'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
+        #     })
 
         # configure nightly job for testing with address sanitizer on linux
         if os_name == 'linux':
@@ -417,7 +417,6 @@ def main(argv=None):
             'test_cli',
             'test_cli_remapping',
             'test_communication',
-            'test_launch_ros',
             'test_msgs',
             'test_quality_of_service',
             'test_rclcpp',
@@ -448,127 +447,127 @@ def main(argv=None):
                 'test_args_default': data['test_args_default'] + ' --packages-skip qt_gui_cpp --packages-skip-by-dep qt_gui_cpp ' +
                                      '--packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
             })
-            create_job(os_name, 'test_' + os_name + '_coverage', 'ci_job.xml.em', {
-                'build_discard': {
-                    'days_to_keep': 100,
-                    'num_to_keep': 100,
-                },
-                'cmake_build_type': 'Debug',
-                'enable_coverage_default': 'true',
-                'build_args_default': data['build_args_default'] + ' --packages-skip qt_gui_cpp --packages-skip-by-dep qt_gui_cpp ' +
-                                      '--packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
-                'test_args_default': data['test_args_default'] + ' --packages-skip qt_gui_cpp --packages-skip-by-dep qt_gui_cpp ' +
-                                     '--packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
-            })
+            # create_job(os_name, 'test_' + os_name + '_coverage', 'ci_job.xml.em', {
+            #     'build_discard': {
+            #         'days_to_keep': 100,
+            #         'num_to_keep': 100,
+            #     },
+            #     'cmake_build_type': 'Debug',
+            #     'enable_coverage_default': 'true',
+            #     'build_args_default': data['build_args_default'] + ' --packages-skip qt_gui_cpp --packages-skip-by-dep qt_gui_cpp ' +
+            #                           '--packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
+            #     'test_args_default': data['test_args_default'] + ' --packages-skip qt_gui_cpp --packages-skip-by-dep qt_gui_cpp ' +
+            #                          '--packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
+            # })
 
         # configure nightly coverage job on x86 Linux only
-        if os_name == 'linux':
-            create_job(os_name, 'nightly_' + os_name + '_coverage', 'ci_job.xml.em', {
-                'build_discard': {
-                    'days_to_keep': 100,
-                    'num_to_keep': 100,
-                },
-                'cmake_build_type': 'Debug',
-                'enable_coverage_default': 'true',
-                'time_trigger_spec': PERIODIC_JOB_SPEC,
-                'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
-                'build_args_default': data['build_args_default'] +
-                                      ' --packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
-                'test_args_default': data['test_args_default'] +
-                                     ' --packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
-            })
+        # if os_name == 'linux':
+        #     create_job(os_name, 'nightly_' + os_name + '_coverage', 'ci_job.xml.em', {
+        #         'build_discard': {
+        #             'days_to_keep': 100,
+        #             'num_to_keep': 100,
+        #         },
+        #         'cmake_build_type': 'Debug',
+        #         'enable_coverage_default': 'true',
+        #         'time_trigger_spec': PERIODIC_JOB_SPEC,
+        #         'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
+        #         'build_args_default': data['build_args_default'] +
+        #                               ' --packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
+        #         'test_args_default': data['test_args_default'] +
+        #                              ' --packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
+        #     })
             # Add a coverage job targeting Foxy.
-            create_job(os_name, 'nightly_' + os_name + '_foxy_coverage', 'ci_job.xml.em', {
-                'build_discard': {
-                    'days_to_keep': 100,
-                    'num_to_keep': 100,
-                },
-                'cmake_build_type': 'Debug',
-                'default_repos_url': 'https://raw.githubusercontent.com/ros2/ros2/foxy/ros2.repos',
-                'enable_coverage_default': 'true',
-                'time_trigger_spec': PERIODIC_JOB_SPEC,
-                'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
-                'ros_distro': 'foxy',
-                'ubuntu_distro': 'focal',
-                'build_args_default': data['build_args_default'] +
-                                      ' --packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
-                'test_args_default': data['test_args_default'] +
-                                     ' --packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
-            })
+            # create_job(os_name, 'nightly_' + os_name + '_foxy_coverage', 'ci_job.xml.em', {
+            #     'build_discard': {
+            #         'days_to_keep': 100,
+            #         'num_to_keep': 100,
+            #     },
+            #     'cmake_build_type': 'Debug',
+            #     'default_repos_url': 'https://raw.githubusercontent.com/ros2/ros2/foxy/ros2.repos',
+            #     'enable_coverage_default': 'true',
+            #     'time_trigger_spec': PERIODIC_JOB_SPEC,
+            #     'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
+            #     'ros_distro': 'foxy',
+            #     'ubuntu_distro': 'focal',
+            #     'build_args_default': data['build_args_default'] +
+            #                           ' --packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
+            #     'test_args_default': data['test_args_default'] +
+            #                          ' --packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
+            # })
             # Add a coverage job targeting Galactic.
-            create_job(os_name, 'nightly_' + os_name + '_galactic_coverage', 'ci_job.xml.em', {
-                'build_discard': {
-                    'days_to_keep': 100,
-                    'num_to_keep': 100,
-                },
-                'cmake_build_type': 'Debug',
-                'default_repos_url': 'https://raw.githubusercontent.com/ros2/ros2/galactic/ros2.repos',
-                'enable_coverage_default': 'true',
-                'time_trigger_spec': PERIODIC_JOB_SPEC,
-                'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
-                'ros_distro': 'galactic',
-                'ubuntu_distro': 'focal',
-                'build_args_default': data['build_args_default'] +
-                                      ' --packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
-                'test_args_default': data['test_args_default'] +
-                                     ' --packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
-            })
+            # create_job(os_name, 'nightly_' + os_name + '_galactic_coverage', 'ci_job.xml.em', {
+            #     'build_discard': {
+            #         'days_to_keep': 100,
+            #         'num_to_keep': 100,
+            #     },
+            #     'cmake_build_type': 'Debug',
+            #     'default_repos_url': 'https://raw.githubusercontent.com/ros2/ros2/galactic/ros2.repos',
+            #     'enable_coverage_default': 'true',
+            #     'time_trigger_spec': PERIODIC_JOB_SPEC,
+            #     'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
+            #     'ros_distro': 'galactic',
+            #     'ubuntu_distro': 'focal',
+            #     'build_args_default': data['build_args_default'] +
+            #                           ' --packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
+            #     'test_args_default': data['test_args_default'] +
+            #                          ' --packages-up-to ' + ' '.join(quality_level_pkgs + testing_pkgs_for_quality_level),
+            # })
 
         # configure nightly triggered job
-        if os_name != 'linux-armhf':
-            job_name = 'nightly_' + job_os_name + '_release'
-            if os_name == 'windows':
-                job_name = job_name[:15]
-            create_job(os_name, job_name, 'ci_job.xml.em', {
-                'cmake_build_type': 'Release',
-                'time_trigger_spec': PERIODIC_JOB_SPEC,
-                'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
-            })
+        # if os_name != 'linux-armhf':
+        #     job_name = 'nightly_' + job_os_name + '_release'
+        #     if os_name == 'windows':
+        #         job_name = job_name[:15]
+        #     create_job(os_name, job_name, 'ci_job.xml.em', {
+        #         'cmake_build_type': 'Release',
+        #         'time_trigger_spec': PERIODIC_JOB_SPEC,
+        #         'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
+        #     })
 
         # configure nightly triggered job with repeated testing
-        if os_name != 'linux-armhf':
-            job_name = 'nightly_' + job_os_name + '_repeated'
-            if os_name == 'windows':
-                job_name = job_name[:15]
-            test_args_default = os_configs.get(os_name, data).get('test_args_default', data['test_args_default'])
-            test_args_default = test_args_default.replace('--retest-until-pass', '--retest-until-fail')
-            test_args_default = re.sub(r'(--ctest-args +-LE +)"?([^ "]+)"?', r'\1"(linter|\2)"', test_args_default)
-            test_args_default = test_args_default.replace('--pytest-args -m "not xfail"', '--pytest-args -m "not linter and not xfail"')
-            create_job(os_name, job_name, 'ci_job.xml.em', {
-                'cmake_build_type': 'None',
-                'time_trigger_spec': PERIODIC_JOB_SPEC,
-                'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
-                'test_args_default': test_args_default,
-            })
+        # if os_name != 'linux-armhf':
+        #     job_name = 'nightly_' + job_os_name + '_repeated'
+        #     if os_name == 'windows':
+        #         job_name = job_name[:15]
+        #     test_args_default = os_configs.get(os_name, data).get('test_args_default', data['test_args_default'])
+        #     test_args_default = test_args_default.replace('--retest-until-pass', '--retest-until-fail')
+        #     test_args_default = re.sub(r'(--ctest-args +-LE +)"?([^ "]+)"?', r'\1"(linter|\2)"', test_args_default)
+        #     test_args_default = test_args_default.replace('--pytest-args -m "not xfail"', '--pytest-args -m "not linter and not xfail"')
+        #     create_job(os_name, job_name, 'ci_job.xml.em', {
+        #         'cmake_build_type': 'None',
+        #         'time_trigger_spec': PERIODIC_JOB_SPEC,
+        #         'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
+        #         'test_args_default': test_args_default,
+        #     })
 
         # configure nightly triggered job for excluded test
-        if os_name != 'linux-armhf':
-            job_name = 'nightly_' + job_os_name + '_xfail'
-            test_args_default = os_configs.get(os_name, data).get('test_args_default', data['test_args_default'])
-            test_args_default = re.sub(r'--ctest-args +-LE +"?[^ "]+"?', r'--ctest-args -L xfail', test_args_default)
-            test_args_default = test_args_default.replace('--pytest-args -m "not xfail"', '--pytest-args -m xfail --runxfail')
-            create_job(os_name, job_name, 'ci_job.xml.em', {
-                'cmake_build_type': 'None',
-                'time_trigger_spec': PERIODIC_JOB_SPEC,
-                'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
-                'test_args_default': test_args_default,
-            })
+        # if os_name != 'linux-armhf':
+        #     job_name = 'nightly_' + job_os_name + '_xfail'
+        #     test_args_default = os_configs.get(os_name, data).get('test_args_default', data['test_args_default'])
+        #     test_args_default = re.sub(r'--ctest-args +-LE +"?[^ "]+"?', r'--ctest-args -L xfail', test_args_default)
+        #     test_args_default = test_args_default.replace('--pytest-args -m "not xfail"', '--pytest-args -m xfail --runxfail')
+        #     create_job(os_name, job_name, 'ci_job.xml.em', {
+        #         'cmake_build_type': 'None',
+        #         'time_trigger_spec': PERIODIC_JOB_SPEC,
+        #         'mailer_recipients': DEFAULT_MAIL_RECIPIENTS,
+        #         'test_args_default': test_args_default,
+        #     })
 
     # configure the launch job
-    launcher_job_name = 'ci_launcher'
-    if not pattern_select_jobs_regexp or pattern_select_jobs_regexp.match(launcher_job_name):
-        os_specific_data = collections.OrderedDict()
-        for os_name in sorted(os_configs.keys() - launcher_exclude):
-            os_specific_data[os_name] = dict(data)
-            os_specific_data[os_name].update(os_configs[os_name])
-            os_specific_data[os_name]['job_name'] = 'ci_' + os_name
-        job_data = dict(data)
-        job_data['ci_scripts_default_branch'] = args.ci_scripts_default_branch
-        job_data['label_expression'] = 'master'
-        job_data['os_specific_data'] = os_specific_data
-        job_data['cmake_build_type'] = 'None'
-        job_config = expand_template('ci_launcher_job.xml.em', job_data)
-        configure_job(jenkins, launcher_job_name, job_config, **jenkins_kwargs)
+    # launcher_job_name = 'ci_launcher'
+    # if not pattern_select_jobs_regexp or pattern_select_jobs_regexp.match(launcher_job_name):
+    #     os_specific_data = collections.OrderedDict()
+    #     for os_name in sorted(os_configs.keys() - launcher_exclude):
+    #         os_specific_data[os_name] = dict(data)
+    #         os_specific_data[os_name].update(os_configs[os_name])
+    #         os_specific_data[os_name]['job_name'] = 'ci_' + os_name
+    #     job_data = dict(data)
+    #     job_data['ci_scripts_default_branch'] = args.ci_scripts_default_branch
+    #     job_data['label_expression'] = 'master'
+    #     job_data['os_specific_data'] = os_specific_data
+    #     job_data['cmake_build_type'] = 'None'
+    #     job_config = expand_template('ci_launcher_job.xml.em', job_data)
+    #     configure_job(jenkins, launcher_job_name, job_config, **jenkins_kwargs)
 
 
 if __name__ == '__main__':

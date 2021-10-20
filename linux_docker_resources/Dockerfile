@@ -19,13 +19,14 @@ ENV LANG en_US.UTF-8
 # Get https transport for APT.
 RUN apt-get update && apt-get install --no-install-recommends -y \
   lsb-release net-tools sudo \
+  ca-certificates \
   curl \
   gnupg2 \
   apt-transport-https
 
 # Add the ROS repositories to the apt sources list.
 RUN echo "deb http://repositories.ros.org/ubuntu/testing/ `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list
-RUN echo "Bust Cache for key update 2019-06-08" && curl --silent http://repositories.ros.org/repos.key | apt-key add -
+RUN echo "Bust Cache for key update 2021-06-01" && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | apt-key add -
 
 # Add the OSRF repositories to the apt sources list.
 RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-latest.list
@@ -69,7 +70,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 RUN apt-get update && apt-get install --no-install-recommends -y python3-pip
 RUN pip3 install -U setuptools pip virtualenv==16.7.9
 
-# Initialize rosdep
 RUN rosdep init && rosdep update
 RUN apt install -y gurumdds-2.7
 
@@ -80,16 +80,11 @@ RUN if test ${COMPILE_WITH_CLANG} = true; then apt-get update && apt-get install
 RUN apt-get update && apt-get install --no-install-recommends -y lcov
 RUN pip3 install -U lcov_cobertura_fix
 
-# Install the OpenSplice binary from the OSRF repositories.
-RUN if test ${UBUNTU_DISTRO} != focal; then apt-get update && apt-get install --no-install-recommends -y libopensplice69=6.9.190705+osrf1-1~$UBUNTU_DISTRO; fi
-# Update default domain id.
-RUN if test ${UBUNTU_DISTRO} != focal; then sed -i "s/<Id>0<\/Id>/<Id>108<\/Id>/" /usr/etc/opensplice/config/ospl.xml; fi
-
 # Install importlib-resources for Bionic only.
 RUN if test ${UBUNTU_DISTRO} = bionic; then pip3 install -U importlib-resources; fi
 
 # Install the Connext binary from the OSRF repositories.
-RUN if test \( ${PLATFORM} = x86 -a ${INSTALL_CONNEXT_DEBS} = true \); then apt-get update && RTI_NC_LICENSE_ACCEPTED=yes apt-get install -y rti-connext-dds-5.3.1; fi
+#RUN if test \( ${PLATFORM} = x86 -a ${INSTALL_CONNEXT_DEBS} = true \); then apt-get update && RTI_NC_LICENSE_ACCEPTED=yes apt-get install -y rti-connext-dds-5.3.1; fi
 
 # Install the RTI dependencies.
 RUN if test ${PLATFORM} = x86; then apt-get update && apt-get install --no-install-recommends -y default-jre-headless; fi
@@ -98,12 +93,9 @@ RUN if test ${PLATFORM} = x86; then apt-get update && apt-get install --no-insta
 RUN apt-get update && apt-get install --no-install-recommends -y python3-pexpect
 
 # Get and install the RTI web binaries.
-RUN cd /tmp && curl --silent https://s3.amazonaws.com/RTI/Bundles/5.3.1/Evaluation/rti_connext_dds_secure-5.3.1-eval-x64Linux3gcc5.4.0.tar.gz | tar -xz
+#RUN cd /tmp && curl --silent https://s3.amazonaws.com/RTI/Bundles/5.3.1/Evaluation/rti_connext_dds_secure-5.3.1-eval-x64Linux3gcc5.4.0.tar.gz | tar -xz
 RUN cd /tmp && tar -xvf /tmp/openssl-1.0.2n-target-x64Linux3gcc5.4.0.tar.gz
-ADD rti_web_binaries_install_script.py /tmp/rti_web_binaries_install_script.py
-
-# Add the RTI license file.
-# ADD rticonnextdds-license/rti_license.dat /tmp/rti_license.dat
+#ADD rti_web_binaries_install_script.py /tmp/rti_web_binaries_install_script.py
 
 # Add the RTI binaries we made.
 # ADD rticonnextdds-src/librticonnextdds52_5.2.3-1_amd64.deb /tmp/librticonnextdds52_5.2.3-1_amd64.deb

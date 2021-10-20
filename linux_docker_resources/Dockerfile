@@ -175,4 +175,4 @@ WORKDIR "@workdir"
 
 # ENTRYPOINT ["/entry_point.sh"]
 
-CMD ["matchbox-window-manager > /dev/null 2>&1 & python3 -u run_ros2_batch.py $CI_ARGS"]
+CMD ["matchbox-window-manager > /dev/null 2>&1 & python3 -u run_ros2_batch.py rmw_gurumdds_cpp"]

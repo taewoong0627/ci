@@ -86,15 +86,8 @@ RUN if test ${UBUNTU_DISTRO} = bionic; then pip3 install -U importlib-resources;
 # Install the Connext binary from the OSRF repositories.
 #RUN if test \( ${PLATFORM} = x86 -a ${INSTALL_CONNEXT_DEBS} = true \); then apt-get update && RTI_NC_LICENSE_ACCEPTED=yes apt-get install -y rti-connext-dds-5.3.1; fi
 
-# Install the RTI dependencies.
-RUN if test ${PLATFORM} = x86; then apt-get update && apt-get install --no-install-recommends -y default-jre-headless; fi
-
-# Install dependencies for RTI web binaries install script.
-RUN apt-get update && apt-get install --no-install-recommends -y python3-pexpect
-
 # Get and install the RTI web binaries.
 #RUN cd /tmp && curl --silent https://s3.amazonaws.com/RTI/Bundles/5.3.1/Evaluation/rti_connext_dds_secure-5.3.1-eval-x64Linux3gcc5.4.0.tar.gz | tar -xz
-RUN cd /tmp && tar -xvf /tmp/openssl-1.0.2n-target-x64Linux3gcc5.4.0.tar.gz
 #ADD rti_web_binaries_install_script.py /tmp/rti_web_binaries_install_script.py
 
 # Add the RTI binaries we made.
